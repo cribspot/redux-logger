@@ -69,8 +69,8 @@ function printBuffer(buffer, options) {
     const isCollapsed = (typeof collapsed === 'function') ? collapsed(() => nextState, action, logEntry) : collapsed;
 
     const formattedTime = formatTime(startedTime);
-    const headerCSS = ['color: gray; font-weight: lighter;'];
-    headerCSS.push(colors.title ? `color: ${colors.title(formattedAction)};` : '');
+    const headerCSS = isUsingDefaultFormatter ? ['color: gray; font-weight: lighter;'] : [];
+    if (colors.title) headerCSS.push(`color: ${colors.title(formattedAction)};`);
     if (timestamp && isUsingDefaultFormatter) headerCSS.push('color: gray; font-weight: lighter;');
     if (duration && isUsingDefaultFormatter) headerCSS.push('color: gray; font-weight: lighter;');
     const title = titleFormatter(formattedAction, formattedTime, took);
