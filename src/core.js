@@ -74,14 +74,10 @@ function printBuffer(buffer, options) {
 
     // Render
     try {
-      if (isCollapsed) {
-        if (colors.title) logger.groupCollapsed(`%c ${title}`, ...headerCSS);
-        else logger.groupCollapsed(title);
-      } else if (colors.title) {
-        logger.group(`%c ${title}`, ...headerCSS);
-      } else {
-        logger.group(title);
-      }
+      const logMethod = isCollapsed ? logger.groupCollapsed : logger.group;
+      const logText = colors.title ? `%c ${title}` : title;
+      const styleArgs = colors.title ? headerCSS : [];
+      logMethod(logText, ...styleArgs);
     } catch (e) {
       logger.log(title);
     }
