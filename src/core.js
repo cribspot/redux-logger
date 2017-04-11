@@ -45,10 +45,14 @@ function printBuffer(buffer, options) {
     actionTransformer,
     titleFormatter = defaultTitleFormatter(options),
     collapsed,
+    timestamp,
+    duration,
     colors,
     level,
     diff,
   } = options;
+
+  const isUsingDefaultFormatter = options.titleFormatter === undefined;
 
   buffer.forEach((logEntry, key) => {
     const { started, startedTime, action, prevState, error } = logEntry;
@@ -65,11 +69,10 @@ function printBuffer(buffer, options) {
     const isCollapsed = (typeof collapsed === 'function') ? collapsed(() => nextState, action, logEntry) : collapsed;
 
     const formattedTime = formatTime(startedTime);
-    const titleCSS = colors.title ? `color: ${colors.title(formattedAction)};` : '';
     const headerCSS = ['color: gray; font-weight: lighter;'];
-    headerCSS.push(titleCSS);
-    if (options.timestamp) headerCSS.push('color: gray; font-weight: lighter;');
-    if (options.duration) headerCSS.push('color: gray; font-weight: lighter;');
+    headerCSS.push(colors.title ? `color: ${colors.title(formattedAction)};` : '');
+    if (timestamp && isUsingDefaultFormatter) headerCSS.push('color: gray; font-weight: lighter;');
+    if (duration && isUsingDefaultFormatter) headerCSS.push('color: gray; font-weight: lighter;');
     const title = titleFormatter(formattedAction, formattedTime, took);
 
     // Render
